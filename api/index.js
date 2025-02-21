@@ -2,17 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
-
 
 app.get('/bfhl', (req, res) => {
     res.status(200).json({ operation_code: 1 });
 });
 
-// POST /bfhl - Process input
 app.post('/bfhl', (req, res) => {
     try {
         const { data } = req.body;
@@ -28,9 +25,9 @@ app.post('/bfhl', (req, res) => {
 
         res.status(200).json({
             is_success: true,
-            user_id: "john_doe_17091999",
-            email: "john@xyz.com",
-            roll_number: "ABCD123",
+            user_id: process.env.USER_ID || "default_user",
+            email: process.env.EMAIL || "default@xyz.com",
+            roll_number: process.env.ROLL_NUMBER || "DEFAULT123",
             numbers,
             alphabets,
             highest_alphabet
@@ -40,4 +37,5 @@ app.post('/bfhl', (req, res) => {
     }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Export app as a serverless function for Vercel
+module.exports = app;
